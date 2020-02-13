@@ -11,6 +11,11 @@ db = client["awsdb"]
 table = db["statuses"]
 
 
+@app.route("/")
+def thanks():
+    return "Thank you for testing my app :)"
+
+
 @app.route("/echo", methods=["POST"])
 def show_message():
     data = request.get_json()

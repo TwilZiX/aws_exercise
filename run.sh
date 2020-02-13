@@ -1,4 +1,4 @@
 #!/bin/bash
-app="flaskdock"
-docker build -t ${app} .
-docker run -p 5000:80 --volume $PWD/app:/app ${app}
+docker stop aws_exercise_frontend || true && docker rm aws_exercise_frontend || true
+docker stop mongo || true && docker rm mongo || true
+docker-compose up

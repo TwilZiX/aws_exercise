@@ -1,8 +1,39 @@
-<table cellpadding="5" cellspacing="5">
-    {% for row in data %}
-    <tr>
-        <td>{{ row['status'] }}</td>
-        <td>{{ row['time'].date() }}</td>
-    </tr>
-    {% endfor %}
-</table>
+<!doctype html>
+
+<head>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            font-size: 20px
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <table cellpadding="5" cellspacing="5">
+        <tr>
+            <th>status</th>
+            <th>date</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{ row['status'] }}</td>
+            <td>{{ row['time'].strftime("%Y-%m-%d %H:%M:%S") }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>
