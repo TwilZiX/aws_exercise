@@ -1,22 +1,14 @@
 import random
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
+from pymongo import MongoClient
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 
-db = SQLAlchemy(app)
-
-
-class Data(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.String(10), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return self.id
+client = MongoClient("mongodb://datastore:27017/aws")
+db = client["awsdb"]
+table = db["statuses"]
 
 
 @app.route("/echo", methods=["POST"])
@@ -24,18 +16,16 @@ def show_message():
     data = request.get_json()
     if "msg" in data and len(data) == 1:
         msg = data["msg"]
-        new_data = Data(status="ok")
         try:
-            db.session.add(new_data)
-            db.session.commit()
+            post = {"status": "ok", "time": datetime.utcnow()}
+            table.insert_one(post)
             return jsonify(status="ok", msg=msg)
         except:
             return "Something went wrong with database"
     else:
-        new_data = Data(status="error")
         try:
-            db.session.add(new_data)
-            db.session.commit()
+            post = {"status": "error", "time": datetime.utcnow()}
+            table.insert_one(post)
             return jsonify(status="error")
         except:
             return "Something went wrong with database"
@@ -49,9 +39,10 @@ def random_number():
 
 @app.route("/list", methods=["GET"])
 def show_table():
-    my_data = Data.query.order_by(Data.date).all()
+    _my_data = table.find()
+    my_data = [item for item in _my_data]
     return render_template("table.html", data=my_data)
 
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=80, debug=True)
+    app.run("0.0.0.0", debug=True)

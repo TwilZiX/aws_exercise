@@ -8,10 +8,7 @@ WORKDIR /app
 ADD . /app
 
 # execute pip command, pip install -r
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-# unblock port 80 for the Flask app to run on
-EXPOSE 80
+RUN pip install -r requirements.txt
 
 # execute the Flask app
 CMD ["python", "app.py"]
