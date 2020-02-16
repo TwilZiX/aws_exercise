@@ -1,0 +1,1 @@
+I could use a local file to store application data. It could be in .db or .JSON form. For security, I would use some kind of encryption
