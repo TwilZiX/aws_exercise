@@ -31,3 +31,7 @@ There you can post a massage using JSON, which will be added to database. Your d
 #### /list (GET)
 
 Prints all statuses added to the database along with the time it happened
+
+### Warning
+
+At the start database is empty, you have to put something there with /echo to see the content
