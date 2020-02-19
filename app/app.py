@@ -18,8 +18,8 @@ def thanks():
 
 @app.route("/echo", methods=["POST"])
 def show_message():
-    data = request.get_json()
-    if "msg" in data and len(data) == 1:
+    data = request.get_json(force=True)
+    if len(data) == 1 and "msg" in data:
         msg = data["msg"]
         try:
             post = {"status": "ok", "time": datetime.utcnow()}
