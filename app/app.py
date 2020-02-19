@@ -1,7 +1,7 @@
 import random
 from datetime import datetime
 from pymongo import MongoClient
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 app.config["JSON_SORT_KEYS"] = False
@@ -46,7 +46,15 @@ def random_number():
 def show_table():
     _my_data = table.find()
     my_data = [item for item in _my_data]
-    return render_template("table.html", data=my_data)
+    result = []
+    for item in my_data:
+        result.append(
+            {
+                "status": str(item["status"]),
+                "time": str(item["time"].strftime("%Y-%m-%d %H:%M:%S")),
+            }
+        )
+    return jsonify(result)
 
 
 if __name__ == "__main__":
